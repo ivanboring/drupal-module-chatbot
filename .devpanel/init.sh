@@ -20,11 +20,15 @@ echo
 echo Remove root-owned files.
 time sudo rm -rf lost+found
 
+#== Install postgresql on the host.
+source .devpanel/setup_postgres.sh
+
 #== Composer install.
 if [ ! -f composer.json ]; then
   echo
   echo 'Generate composer.json.'
   time source .devpanel/composer_setup.sh
+  time source .devpanel/composer_extra.sh
 fi
 echo
 time composer -n update --no-dev --no-progress
@@ -57,10 +61,14 @@ if [ -z "$(mysql -h $DB_HOST -P $DB_PORT -u $DB_USER -p$DB_PASSWORD $DB_NAME -e 
 
   echo
   echo 'Tell Automatic Updates about patches.'
+  drush pm:en package_manager -y
   time drush -n cset --input-format=yaml package_manager.settings additional_known_files_in_project_root '["patches.json", "patches.lock.json"]'
 else
   drush -n updb
 fi
+
+#== Apply the recipe logic.
+source .devpanel/recipe_logic.sh
 
 #== Warm up caches.
 echo
