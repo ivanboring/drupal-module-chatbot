@@ -42,14 +42,9 @@ sudo curl -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc --fail htt
 sudo sh -c "echo 'deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt $VERSION_CODENAME-pgdg main' > /etc/apt/sources.list.d/pgdg.list"
 sudo apt-get update
 
-#== Install PHP 8.3 from Sury.
-sudo curl -sSLo /usr/share/keyrings/deb.sury.org-php.gpg https://packages.sury.org/php/apt.gpg
-sudo sh -c 'echo "deb [signed-by=/usr/share/keyrings/deb.sury.org-php.gpg] https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list'
-sudo apt update
-
 #== Install postgresql on the host.
 echo 'PostgreSQL is not installed. Installing it now.'
-time sudo apt-get install -y postgresql postgresql-17-pgvector
+time sudo apt-get install -y postgresql postgresql-17-pgvector postgresql-client
 #== Make it less promiscuous in DDEV only.
 if env | grep -q DDEV_PROJECT; then
   sudo chmod 0755 /usr/bin
@@ -68,7 +63,7 @@ sudo su postgres -c "psql -c \"CREATE DATABASE db WITH OWNER db ENCODING 'UTF8' 
 sudo su postgres -c "psql -d db -c \"CREATE EXTENSION IF NOT EXISTS vector;\""
 
 # Make sure that php has pgsql installed.
-sudo apt install libpq-dev
+sudo apt install -y libpq-dev
 sudo -E docker-php-ext-install pgsql
 
 # Reload Apache if it's running.
