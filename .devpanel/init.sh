@@ -20,9 +20,6 @@ echo
 echo Remove root-owned files.
 time sudo rm -rf lost+found
 
-#== Install postgresql on the host.
-source .devpanel/setup_postgres.sh
-
 #== Composer install.
 if [ ! -f composer.json ]; then
   echo
