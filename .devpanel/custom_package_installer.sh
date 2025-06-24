@@ -56,11 +56,11 @@ else
   sudo service postgresql start
 fi
 #== Create the user.
-sudo su postgres -c "psql -c \"CREATE ROLE db WITH LOGIN PASSWORD 'db';\""
+sudo su postgres -c "psql -c \"CREATE ROLE $DB_USER WITH LOGIN PASSWORD '$DB_PASSWORD';\""
 #== Create the database.
-sudo su postgres -c "psql -c \"CREATE DATABASE db WITH OWNER db ENCODING 'UTF8' LC_COLLATE='C' LC_CTYPE='C' TEMPLATE template0;\""
+sudo su postgres -c "psql -c \"CREATE DATABASE $DB_NAME WITH OWNER $DB_USER ENCODING 'UTF8' LC_COLLATE='C' LC_CTYPE='C' TEMPLATE template0;\""
 #== Enable pgvector extension.
-sudo su postgres -c "psql -d db -c \"CREATE EXTENSION IF NOT EXISTS vector;\""
+sudo su postgres -c "psql -d $DB_NAME -c \"CREATE EXTENSION IF NOT EXISTS vector;\""
 
 # Make sure that php has pgsql installed.
 sudo apt install -y libpq-dev
