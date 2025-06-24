@@ -69,9 +69,9 @@ drush pm:en admin_toolbar -y
 drush pm:en admin_toolbar_tools -y
 
 #== Apply the recipe logic.
-#if [ -n "${LITELLM_KEY:-}" ]; then
-  #source .devpanel/recipe_logic.sh
-#fi
+if [ -n "${LITELLM_KEY:-}" ]; then
+  source .devpanel/recipe_logic.sh
+fi
 
 #== Warm up caches.
 echo
