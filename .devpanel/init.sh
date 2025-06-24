@@ -64,8 +64,14 @@ else
   drush -n updb
 fi
 
+#== Apply the admin toolbar.
+drush pm:en admin_toolbar -y
+drush pm:en admin_toolbar_tools -y
+
 #== Apply the recipe logic.
-source .devpanel/recipe_logic.sh
+if [ -n "${DP_AI_VIRTUAL_KEY:-}" ]; then
+  #source .devpanel/recipe_logic.sh
+fi
 
 #== Warm up caches.
 echo
